@@ -1,19 +1,41 @@
 #include <iostream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
-class User {
+class User 
+{
     public:
-    string username, password, email;
+    string name;
+    string username;
+    string password;
+    string email;
+    int age;
+    bool gender;
     vector<string> qualities;
     vector<User *> followers;
 
-    User() {
-        username = password = email = "";
+    User() 
+    {
+        name = "";
+        username = "";
+        password = "";
+        email = "";
+        age = 0;
+        gender = false;
     }
 
-    void addUser() {
+    void inputUserDetails() 
+    {
+        cout << "Please enter your name: ";
+        cin >> name;
+        cout << "Please enter your age: ";
+        cin >> age;
+        cout << "Please choose your gender: " << endl;
+        cout << "0. Male" << endl;
+        cout << "1. Female" << endl;
+        cin >> gender;
         cout << "Please enter the username: ";
         cin >> username;
         cout << "Please enter the password: ";
@@ -25,19 +47,26 @@ class User {
             cout << "Please enter a quality: ";
             cin >> quality;
             if(quality != "none")
-                qualities.push_back(quality);
-            else
                 break;
+            else
+                qualities.push_back(quality);
         }
     }
 
-    void addFollower(User *user) {
+    void addFollower(User *user) 
+    {
         followers.push_back(user);
     }
 
-    void printUser() {
+    void printUserDetails() 
+    {
+        cout << "Name: " << name << endl;
+        cout << "Age: " << age << endl;
+        if(gender)
+            cout << "Gender: Female" << endl;
+        else
+            cout << "Gender: Male" << endl; 
         cout << "Username: " << username << endl;
-        cout << "Password: " << password << endl;
         cout << "Email: " << email << endl;
         cout << "Number of Qualities: " << qualities.size() << endl;
         for(int index = 0; index < qualities.size(); index++)
@@ -49,6 +78,9 @@ class User {
     }
 };
 
-int main() {
+
+
+int main() 
+{
     return 0;
 }
