@@ -1,40 +1,42 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <iostream>
 #include "Node.h"
-#include "User.h"
-
-using namespace std;
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
 class Tree {
     private:
-    Node *root;
+    Node* root;
 
     int height(Node *);
 
     int getBalance(Node *);
 
-    Node *rightRotate(Node *);
+    Node* rightRotate(Node *);
 
-    Node *leftRotate(Node *);
-
-    Node *insert(Node *, User *);
-
-    Node *search(Node *, const string &);
+    Node* leftRotate(Node *);
 
     int compareUsername(User *, User *);
+
+    Node* insert(Node *, User *);
+
+    Node* search(Node *, const string &);
 
     public:
     Tree();
 
     void insert(User *);
 
-    Node *search(const string &);
+    Node* search(const string &);
+
+    void loadFromFile(const string & = "users.txt");
+
+    Node* getRoot();
 
     void inOrder(Node *);
-
-    Node *getRoot();
 };
 
 #endif

@@ -6,7 +6,8 @@
 
 using namespace std;
 
-class Node {
+class Node
+{
     public:
     User *user;
     Node *left;
@@ -14,6 +15,8 @@ class Node {
     int height;
 
     Node();
+
+    Node(User *);
 };
 
 #endif

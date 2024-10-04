@@ -8,7 +8,7 @@ CXXFLAGS = -std=c++11 -Wall
 TARGET = uniconnect
 
 # Source files
-SRCS = main.cpp User.cpp
+SRCS = main.cpp User.cpp Node.cpp Tree.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)

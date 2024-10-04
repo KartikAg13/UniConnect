@@ -1,9 +1,12 @@
 #ifndef USER_H
 #define USER_H
 
-#include<iostream>
-#include<vector>
-#include<string>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <stdexcept>
+#include <regex>
 
 using namespace std;
 
@@ -15,9 +18,17 @@ class User
     string password;
     string email;
     int age;
-    bool gender;
+    enum Gender { Male, Female } gender;
     vector<string> qualities;
     vector<User *> followers;
+
+    bool validateEmail(const string &);
+
+    bool validateAge(int);
+
+    bool validateUsername(const string &);
+
+    bool validatePassword(const string &);
 
     public:
     User();
@@ -26,7 +37,11 @@ class User
 
     void addFollower(User *);
 
-    void printUserDetails();
+    void printUserDetails() const;
+
+    bool saveUserToFile(const string & = "users.txt") const;
+
+    friend class Tree;
 };
 
 #endif
