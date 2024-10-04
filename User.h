@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class User 
+class User
 {
     private:
     string name;
@@ -18,10 +18,10 @@ class User
     bool gender;
     vector<string> qualities;
     vector<User *> followers;
-    
+
     public:
     User();
-    
+
     void inputUserDetails();
 
     void addFollower(User *);
