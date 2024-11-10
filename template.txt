@@ -1,0 +1,7 @@
+//name
+//password
+//email
+//age
+//gender
+//Qualities: q1, q2, q3, q4, q5
+//Followers: f1, f2, f3, f4, f5, f6...

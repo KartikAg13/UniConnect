@@ -1,4 +1,6 @@
 #include "User.h"
+#include "File.h"
+#include "AVLTree.h"
 
 User::User()
 {
@@ -7,12 +9,22 @@ User::User()
     password = "";
     email = "";
     age = 0;
-    gender = Male;
+    gender = false;
+}
+
+User::User(string name, string username, string password, string email, int age, bool gender)
+{
+    this->name = name;
+    this->username = username;
+    this->password = password;
+    this->email = email;
+    this->age = age;
+    this->gender = gender;
 }
 
 bool User::validateEmail(const string &email)
 {
-    const regex email_pattern("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    const regex email_pattern("^\\d+@mail\\.jiit\\.ac\\.in$");
     if (!regex_match(email, email_pattern))
     {
         cout << "Invalid email format. Please try again." << endl;
@@ -76,13 +88,14 @@ void User::inputUserDetails()
         cin >> genderInput;
     } while (genderInput != 0 && genderInput != 1);
 
-    gender = (genderInput == 1) ? Female : Male;
+    gender = (genderInput == 1) ? true : false;
 
+    //validate the username and make sure the username is not in use
     do
     {
         cout << "Please enter the username: ";
         cin >> username;
-    } while (!validateUsername(username));
+    } while (!validateUsername(username) && AVLTREE_H::AVLTree::searchUser(username));
 
     do
     {
@@ -105,6 +118,14 @@ void User::inputUserDetails()
         if (quality == "none") break;
         qualities.push_back(quality);
     }
+
+    if(FILE_H::saveUserToFile(this))
+        cout << "User successfully registered" << endl;
+    else
+    {
+        cout << "Could not register User" << endl;
+        exit(1);
+    }
 }
 
 void User::addFollower(User *user) {
@@ -120,7 +141,7 @@ void User::printUserDetails() const
 {
     cout << "Name: " << name << endl;
     cout << "Age: " << age << endl;
-    cout << "Gender: " << (gender == Male ? "Male" : "Female") << endl;
+    cout << "Gender: " << (gender == false ? "Male" : "Female") << endl;
     cout << "Username: " << username << endl;
     cout << "Email: " << email << endl;
 
@@ -134,30 +155,47 @@ void User::printUserDetails() const
         cout << follower->username << endl;
 }
 
-bool User::saveUserToFile(const string& filePath) const
+string User::getName() const
 {
-    try
-    {
-        ofstream file(filePath, ios::app);
-        if (!file)
-        {
-            cout << "Error: Could not open file " << filePath << " for writing" << endl;
-            return false;
-        }
+    return name;
+}
 
-        file << name << "," << username << "," << password << "," << email << "," << age << "," << gender << "\n";
+string User::getUsername() const
+{
+    return username;
+}
 
-        if (!file.good())
-        {
-            cout << "Error: Writing to file failed" << endl;
-            return false;
-        }
-    }
-    catch (const ofstream::failure& e)
-    {
-        cerr << "Exception while handling file: " << e.what() << endl;
-        return false;
-    }
+string User::getPassword() const
+{
+    return password;
+}
 
-    return true;
+string User::getEmail() const
+{
+    return email;
+}
+
+int User::getAge() const
+{
+    return age;
+}
+
+bool User::getGender() const
+{
+    return gender;
+}
+
+vector<string> User::getQualities() const
+{
+    return qualities;
+}
+
+vector<User *> User::getFollowers() const
+{
+    return followers;
+}
+
+string User::getGenderAsString() const
+{
+    return gender == false ? "Male" : "Female";
 }

@@ -1,13 +1,14 @@
-#ifndef TREE_H
-#define TREE_H
-
 #include "Node.h"
+
+#ifndef AVLTREE_H
+#define AVLTREE_H
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 
-class Tree {
+class AVLTree {
     private:
     Node* root;
 
@@ -26,11 +27,11 @@ class Tree {
     Node* search(Node *, const string &);
 
     public:
-    Tree();
+    AVLTree();
 
     void insert(User *);
 
-    Node* search(const string &);
+    bool searchUser(const string &);
 
     void loadFromFile(const string & = "users.txt");
 

@@ -1,8 +1,9 @@
+#include "User.h"
+
 #ifndef NODE_H
 #define NODE_H
 
 #include <iostream>
-#include "User.h"
 
 using namespace std;
 

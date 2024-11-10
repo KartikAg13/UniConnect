@@ -1,25 +1,25 @@
-#include "Tree.h"
+#include "AVLTree.h"
 
-Tree::Tree()
+AVLTree::AVLTree()
 {
     root = nullptr;
 }
 
-int Tree::height(Node *node)
+int AVLTree::height(Node *node)
 {
     if(node == nullptr)
         return -1;
     return node->height;
 }
 
-int Tree::getBalance(Node *node)
+int AVLTree::getBalance(Node *node)
 {
     if(node == nullptr)
         return 0;
     return height(root->left) - height(root->right);
 }
 
-Node *Tree::rightRotate(Node *y)
+Node *AVLTree::rightRotate(Node *y)
 {
     Node *x = y->left;
     Node *T2 = x->right;
@@ -32,7 +32,7 @@ Node *Tree::rightRotate(Node *y)
     return x;
 }
 
-Node *Tree::leftRotate(Node *x)
+Node *AVLTree::leftRotate(Node *x)
 {
     Node *y = x->right;
     Node *T2 = y->left;
@@ -45,12 +45,12 @@ Node *Tree::leftRotate(Node *x)
     return y;
 }
 
-int Tree::compareUsername(User *u1, User *u2)
+int AVLTree::compareUsername(User *u1, User *u2)
 {
-    return u1->username.compare(u2->username);
+    return u1->getUsername().compare(u2->getUsername());
 }
 
-Node *Tree::insert(Node *node, User *user)
+Node *AVLTree::insert(Node *node, User *user)
 {
     if(node == nullptr)
         return new Node(user);
@@ -85,79 +85,38 @@ Node *Tree::insert(Node *node, User *user)
     return node;
 }
 
-Node *Tree::search(Node *node, const string &username)
+Node *AVLTree::search(Node *node, const string &username)
 {
-    if(node == nullptr || node->user->username == username)
+    if(node == nullptr || node->user->getUsername() == username)
         return node;
 
-    if(username < node->user->username)
+    if(username < node->user->getUsername())
         return search(node->left, username);
 
     return search(node->right, username);
 }
 
-void Tree::insert(User *user)
+void AVLTree::insert(User *user)
 {
     root = insert(root, user);
 }
 
-Node *Tree::search(const string &username)
+bool AVLTree::searchUser(const string &username)
 {
-    return search(root, username);
+    return search(root, username) != nullptr;
 }
 
-void Tree::loadFromFile(const string &filePath)
-{
-    ifstream file(filePath);
-    if (!file.is_open())
-    {
-        cerr << "Error: Could not open file " << filePath << endl;
-        return;
-    }
-
-    string line;
-    while (getline(file, line))
-    {
-        stringstream ss(line);
-        string name, username, password, email, ageStr, genderStr;
-        int age;
-        int gender;
-
-        getline(ss, name, ',');
-        getline(ss, username, ',');
-        getline(ss, password, ',');
-        getline(ss, email, ',');
-        getline(ss, ageStr, ',');
-        getline(ss, genderStr, ',');
-
-        age = stoi(ageStr);
-        gender = stoi(genderStr);
-
-        User* user = new User();
-        user->name = name;
-        user->username = username;
-        user->password = password;
-        user->email = email;
-        user->age = age;
-        user->gender = (gender == 0) ? User::Male : User::Female;
-
-        insert(user);
-    }
-
-    file.close();
-}
-
-Node *Tree::getRoot()
+Node *AVLTree::getRoot()
 {
     return root;
 }
 
-void Tree::inOrder(Node *node)
+void AVLTree::inOrder(Node *node)
 {
     if(node != nullptr)
     {
         inOrder(node->left);
-        cout << node->user->username << endl;
+        cout << node->user->getUsername() << endl;
         inOrder(node->right);
     }
 }

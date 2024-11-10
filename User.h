@@ -4,9 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
 #include <stdexcept>
 #include <regex>
+#include <cstdlib>
 
 using namespace std;
 
@@ -18,7 +18,7 @@ class User
     string password;
     string email;
     int age;
-    enum Gender { Male, Female } gender;
+    bool gender;
     vector<string> qualities;
     vector<User *> followers;
 
@@ -33,15 +33,31 @@ class User
     public:
     User();
 
+    User(string, string, string, string, int, bool);
+
     void inputUserDetails();
 
     void addFollower(User *);
 
     void printUserDetails() const;
 
-    bool saveUserToFile(const string & = "users.txt") const;
+    string getName() const;
 
-    friend class Tree;
+    string getUsername() const;
+
+    string getPassword() const;
+
+    string getEmail() const;
+
+    int getAge() const;
+
+    bool getGender() const;
+
+    vector<string> getQualities() const;
+
+    vector<User *> getFollowers() const;
+
+    string getGenderAsString() const;
 };
 
 #endif
