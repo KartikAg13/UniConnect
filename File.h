@@ -8,13 +8,14 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
-using namespace std;
+using String = std::string;
 
 bool saveUserToFile(User *user);
 
-Node *parseUserFiles(const string &);
+User *loadFromFile(const String &);
 
-User *loadFromFile(const string &);
+Node *parseUserFiles(const String & = "userData/");
 
 #endif

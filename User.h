@@ -8,32 +8,31 @@
 #include <regex>
 #include <cstdlib>
 
-using namespace std;
+using String = std::string;
 
-class User
-{
-    private:
-    string name;
-    string username;
-    string password;
-    string email;
+class User {
+private:
+    String name;
+    String username;
+    String password;
+    String email;
     int age;
     bool gender;
-    vector<string> qualities;
-    vector<User *> followers;
+    std::vector<String> qualities;
+    std::vector<String> followers;
 
-    bool validateEmail(const string &);
+    bool validateEmail(const String &);
 
     bool validateAge(int);
 
-    bool validateUsername(const string &);
+    bool validateUsername(const String &);
+    
+    bool validatePassword(const String &);
 
-    bool validatePassword(const string &);
-
-    public:
+public:
     User();
-
-    User(string, string, string, string, int, bool);
+    
+    User(String, String, String, String, int, bool);
 
     void inputUserDetails();
 
@@ -41,23 +40,23 @@ class User
 
     void printUserDetails() const;
 
-    string getName() const;
+    String getName() const;
 
-    string getUsername() const;
+    String getUsername() const;
 
-    string getPassword() const;
+    String getPassword() const;
 
-    string getEmail() const;
+    String getEmail() const;
 
     int getAge() const;
 
     bool getGender() const;
 
-    vector<string> getQualities() const;
+    std::vector<String> getQualities() const;
 
-    vector<User *> getFollowers() const;
+    std::vector<String> getFollowers() const;
 
-    string getGenderAsString() const;
+    String getGenderAsString() const;
 };
 
 #endif

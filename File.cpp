@@ -1,96 +1,109 @@
 #include "File.h"
-#include <vector>
+#include <experimental/filesystem>
 
-namespace fs = std::filesystem;
+namespace fs = std::experimental::filesystem;
 
 bool saveUserToFile(User *user)
 {
     try
     {
-        const string filePath = user->getUsername() + ".txt";
-        ofstream file(filePath, ios::app);
-        if (!file.is_open())
+        const String filePath = user->getUsername() + ".txt";
+        std::ofstream file(filePath, std::ios::app);
+        if (file.is_open() == false)
         {
-            cout << "Error: Could not open file " << filePath << " for writing" << endl;
+            std::cout << "Error: Could not open file " << filePath << " for writing" << std::endl;
             return false;
         }
-        file << user->getName() << endl;
-        file << user->getPassword() << endl;
-        file << user->getEmail() << endl;
-        file << user->getAge() << endl;
-        file << user->getGenderAsString() << endl;
+        file << user->getName() << std::endl;
+        file << user->getPassword() << std::endl;
+        file << user->getEmail() << std::endl;
+        file << user->getAge() << std::endl;
+        file << user->getGenderAsString() << std::endl;
 
-        vector<string> qualities = user->getQualities();
+        std::vector<String> qualities = user->getQualities();
         int size_qualities = qualities.size();
-        vector<User *> followers = user->getFollowers();
+        std::vector<String> followers = user->getFollowers();
         int size_followers = followers.size();
 
         file << "Qualities: ";
         for(int index = 0; index < size_qualities; index++)
             file << qualities[index] << ", ";
-        file << endl;
+        file << std::endl;
 
         file << "Followers: ";
-        for(int index = 0; index < size_qualities; index++)
-            file << followers[index]->getUsername() << ", ";
-        file << endl;
+        for(int index = 0; index < size_followers; index++)
+            file << followers[index] << ", ";
+        file << std::endl;
 
-        if (!file.good())
+        if (file.good() == false)
         {
-            cout << "Error: Writing to file failed" << endl;
+            std::cout << "Error: Writing to file failed" << std::endl;
             return false;
         }
     }
-    catch (const ofstream::failure& e)
+    catch (const std::ofstream::failure& e)
     {
-        cerr << "Exception while handling file: " << e.what() << endl;
+        std::cerr << "Exception while handling file: " << e.what() << std::endl;
         return false;
     }
-
     return true;
 }
 
-User* loadFromFile(const string& filename) {
-    ifstream file(filename);
-
-    if (!file.is_open()) {
-        cerr << "Error: Could not open file " << filename << endl;
+User* loadFromFile(const String& filename) 
+{
+    std::ifstream file(filename);
+    if (file.is_open() == false) 
+    {
+        std::cerr << "Error: Could not open file " << filename << std::endl;
         return nullptr;
     }
-
-    string name, username, password, email, genderStr, temp;
+    String username, name, password, email, genderStr, line;
     int age;
     bool gender;
-
-    getline(file, name);
-
+    std::vector<String> qualities, followers;
     getline(file, username);
-
+    getline(file, name);
     getline(file, password);
-
     getline(file, email);
+    getline(file, line);
+    age = stoi(line);
+    getline(file, line);
+    gender = (line == "Male") ? false : true;
 
-    getline(file, temp);
-    age = stoi(temp);
-
-    getline(file, temp);
-    gender = (temp == "Male") ? false : true;
-
+    getline(file, line);
+    String qualitiesStr = line;
+    std::stringstream ss(qualitiesStr);
+    String quality;
+    while (getline(ss, quality, ',') && qualities.size() < 5) 
+    {
+        qualities.push_back(quality);
+    }
+    
+    getline(file, line);
+    String followersStr = line;
+    std::stringstream fs(followersStr);
+    String follower;
+    while (getline(fs, follower, ',')) 
+    {
+        followers.push_back(follower);
+    }
+    
     file.close();
-
     return new User(name, username, password, email, age, gender);
 }
 
 
-Node *parseUserFiles(const string &path)
+Node *parseUserFiles(const String &path)
 {
     AVLTree root;
     for (const auto& entry : fs::directory_iterator(path))
     {
-            std::string filepath = entry.path().string();
+            String filepath = entry.path().string();
             User* user = loadFromFile(filepath);
             if (user != nullptr)
+            {
                 root.insert(user);
+            }
     }
     return root.getRoot();
 }

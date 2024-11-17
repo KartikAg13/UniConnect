@@ -8,6 +8,8 @@
 #include <sstream>
 #include <algorithm>
 
+using String = std::string;
+
 class AVLTree {
     private:
     Node* root;
@@ -24,16 +26,16 @@ class AVLTree {
 
     Node* insert(Node *, User *);
 
-    Node* search(Node *, const string &);
+    Node* search(Node *, const String &);
 
     public:
     AVLTree();
 
     void insert(User *);
 
-    bool searchUser(const string &);
+    bool searchUser(const String &);
 
-    void loadFromFile(const string & = "users.txt");
+    void loadFromFile(const String &);
 
     Node* getRoot();
 

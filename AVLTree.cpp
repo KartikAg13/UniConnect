@@ -27,8 +27,8 @@ Node *AVLTree::rightRotate(Node *y)
     x->right = y;
     y->left = T2;
 
-    y->height = max(height(y->left), height(y->right)) + 1;
-    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = std::max(height(y->left), height(y->right)) + 1;
+    x->height = std::max(height(x->left), height(x->right)) + 1;
     return x;
 }
 
@@ -40,8 +40,8 @@ Node *AVLTree::leftRotate(Node *x)
     y->left = x;
     x->right = T2;
 
-    x->height = max(height(x->left), height(x->right)) + 1;
-    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = std::max(height(x->left), height(x->right)) + 1;
+    y->height = std::max(height(y->left), height(y->right)) + 1;
     return y;
 }
 
@@ -63,7 +63,7 @@ Node *AVLTree::insert(Node *node, User *user)
     else
         return node;
 
-    node->height = 1 + max(height(node->left), height(node->right));
+    node->height = 1 + std::max(height(node->left), height(node->right));
 
     int balance = getBalance(node);
 
@@ -85,7 +85,7 @@ Node *AVLTree::insert(Node *node, User *user)
     return node;
 }
 
-Node *AVLTree::search(Node *node, const string &username)
+Node *AVLTree::search(Node *node, const String &username)
 {
     if(node == nullptr || node->user->getUsername() == username)
         return node;
@@ -101,7 +101,7 @@ void AVLTree::insert(User *user)
     root = insert(root, user);
 }
 
-bool AVLTree::searchUser(const string &username)
+bool AVLTree::searchUser(const String &username)
 {
     return search(root, username) != nullptr;
 }
@@ -116,7 +116,7 @@ void AVLTree::inOrder(Node *node)
     if(node != nullptr)
     {
         inOrder(node->left);
-        cout << node->user->getUsername() << endl;
+        std::cout << node->user->getUsername() << std::endl;
         inOrder(node->right);
     }
 }
