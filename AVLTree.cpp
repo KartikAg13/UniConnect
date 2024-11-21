@@ -5,6 +5,11 @@ AVLTree::AVLTree()
     root = nullptr;
 }
 
+AVLTree::AVLTree(Node *node)
+{
+    this->root = node;
+}
+
 int AVLTree::height(Node *node)
 {
     if(node == nullptr)
@@ -104,6 +109,20 @@ void AVLTree::insert(User *user)
 bool AVLTree::searchUser(const String &username)
 {
     return search(root, username) != nullptr;
+}
+
+bool AVLTree::userLogin(const String &username, const String &password)
+{
+    Node *node = search(root, username);
+    if(node == nullptr)
+    {
+        return false;
+    }
+    else if(node->user->getPassword() == password)
+    {
+        return true;
+    }
+    return false;
 }
 
 Node *AVLTree::getRoot()

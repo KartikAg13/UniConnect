@@ -1,31 +1,26 @@
-# Compiler
 CXX = g++
-
-# Compiler flags
 CXXFLAGS = -std=c++11 -Wall
+LDFLAGS = -lstdc++fs
 
-# Target executable
-TARGET = uniconnect
+all: uniconnect
 
-# Source files
-SRCS = main.cpp User.cpp Node.cpp AVLTree.cpp File.cpp
+uniconnect: main.o User.o Node.o AVLTree.o File.o
+	$(CXX) $(CXXFLAGS) -o uniconnect main.o User.o Node.o AVLTree.o File.o $(LDFLAGS)
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+main.o: main.cpp
+	$(CXX) $(CXXFLAGS) -c main.cpp
 
-# Default target
-all: $(TARGET)
+User.o: User.cpp User.h
+	$(CXX) $(CXXFLAGS) -c User.cpp
 
-# Link object files to create the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+Node.o: Node.cpp Node.h
+	$(CXX) $(CXXFLAGS) -c Node.cpp
 
-# Compile source files into object files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+AVLTree.o: AVLTree.cpp AVLTree.h
+	$(CXX) $(CXXFLAGS) -c AVLTree.cpp
 
-# Clean up build files
+File.o: File.cpp File.h
+	$(CXX) $(CXXFLAGS) -c File.cpp
+
 clean:
-	rm -f $(OBJS) $(TARGET)
-
-.PHONY: clean
+	rm -f *.o uniconnect

@@ -1,7 +1,8 @@
-#include "Node.h"
-
 #ifndef AVLTREE_H
 #define AVLTREE_H
+
+#include "Node.h"
+#include "User.h"
 
 #include <iostream>
 #include <fstream>
@@ -9,6 +10,9 @@
 #include <algorithm>
 
 using String = std::string;
+
+class Node;
+class User;
 
 class AVLTree {
     private:
@@ -31,9 +35,13 @@ class AVLTree {
     public:
     AVLTree();
 
+    AVLTree(Node *);
+
     void insert(User *);
 
     bool searchUser(const String &);
+
+    bool userLogin(const String &, const String &);
 
     void loadFromFile(const String &);
 

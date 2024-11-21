@@ -1,9 +1,11 @@
-#include "User.h"
-
 #ifndef NODE_H
 #define NODE_H
 
+#include "User.h"
+
 #include <iostream>
+
+class User;
 
 class Node
 {

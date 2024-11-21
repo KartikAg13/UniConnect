@@ -12,7 +12,7 @@ User::User()
     gender = false;
 }
 
-User::User(String name, String username, String password, String email, int age, bool gender)
+User::User(String name, String username, String password, String email, int age, bool gender, std::vector<String> qualities, std::vector<String> followers)
 {
     this->name = name;
     this->username = username;
@@ -20,6 +20,8 @@ User::User(String name, String username, String password, String email, int age,
     this->email = email;
     this->age = age;
     this->gender = gender;
+    this->qualities = qualities;
+    this->followers = followers;
 }
 
 bool User::validateEmail(const String &email)
@@ -69,7 +71,7 @@ bool User::validatePassword(const String &password)
     return true;
 }
 
-void User::inputUserDetails()
+void User::inputUserDetails(AVLTree *root)
 {
     std::cout << "Please enter your name: ";
     std::cin.ignore();
@@ -89,13 +91,17 @@ void User::inputUserDetails()
     } while (genderInput != 0 && genderInput != 1);
 
     gender = (genderInput == 1) ? true : false;
-
-    //validate the username and make sure the username is not in use
+    
     do
     {
         std::cout << "Please enter the username: ";
         std::cin >> username;
-    } while (!validateUsername(username) /*&& AVLTREE_H::AVLTree::searchUser(username)*/);
+        if(root->searchUser(username) == false)
+        {
+            std::cout << "Username already exists. Please try again." << std::endl;
+            continue;
+        }
+    } while (!validateUsername(username));
 
     do
     {

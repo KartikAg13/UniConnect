@@ -10,6 +10,8 @@
 
 using String = std::string;
 
+class AVLTree;
+
 class User {
 private:
     String name;
@@ -32,9 +34,9 @@ private:
 public:
     User();
     
-    User(String, String, String, String, int, bool);
+    User(String, String, String, String, int, bool, std::vector<String>, std::vector<String>);
 
-    void inputUserDetails();
+    void inputUserDetails(AVLTree *);
 
     void addFollower(User *);
 

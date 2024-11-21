@@ -54,7 +54,7 @@ User* loadFromFile(const String& filename)
     std::ifstream file(filename);
     if (file.is_open() == false) 
     {
-        std::cerr << "Error: Could not open file " << filename << std::endl;
+        std::cerr << "Error: Could not open file" << filename << std::endl;
         return nullptr;
     }
     String username, name, password, email, genderStr, line;
@@ -89,7 +89,7 @@ User* loadFromFile(const String& filename)
     }
     
     file.close();
-    return new User(name, username, password, email, age, gender);
+    return new User(name, username, password, email, age, gender, qualities, followers);
 }
 
 
