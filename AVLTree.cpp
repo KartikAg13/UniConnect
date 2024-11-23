@@ -21,7 +21,7 @@ int AVLTree::getBalance(Node *node)
 {
     if(node == nullptr)
         return 0;
-    return height(root->left) - height(root->right);
+    return height(node->left) - height(node->right);
 }
 
 Node *AVLTree::rightRotate(Node *y)
@@ -34,6 +34,7 @@ Node *AVLTree::rightRotate(Node *y)
 
     y->height = std::max(height(y->left), height(y->right)) + 1;
     x->height = std::max(height(x->left), height(x->right)) + 1;
+
     return x;
 }
 
@@ -47,6 +48,7 @@ Node *AVLTree::leftRotate(Node *x)
 
     x->height = std::max(height(x->left), height(x->right)) + 1;
     y->height = std::max(height(y->left), height(y->right)) + 1;
+
     return y;
 }
 
@@ -57,38 +59,68 @@ int AVLTree::compareUsername(User *u1, User *u2)
 
 Node *AVLTree::insert(Node *node, User *user)
 {
-    if(node == nullptr)
+    if (node == nullptr)
+    {
         return new Node(user);
+    }
 
     int compare = compareUsername(user, node->user);
-    if(compare < 0)
+    if (compare < 0)
+    {
         node->left = insert(node->left, user);
-    else if(compare > 0)
+    }
+    else if (compare > 0)
+    {
         node->right = insert(node->right, user);
-    else
-        return node;
+    }
+    else 
+    {
+        std::cout << "Duplicate user detected: " << user->getUsername() << std::endl;
+        return node; 
+    }
 
     node->height = 1 + std::max(height(node->left), height(node->right));
 
     int balance = getBalance(node);
+    std::cout << "Balance for " << user->getUsername() << ": " << balance << std::endl;
 
-    if(balance > 1 && compareUsername(user, node->left->user) < 0)
+    if (balance > 1 && compareUsername(user, node->left->user) < 0)
+    {
         return rightRotate(node);
-    if(balance < -1 && compareUsername(user, node->right->user) > 0)
+    }
+
+    if (balance < -1 && compareUsername(user, node->right->user) > 0)
+    {
         return leftRotate(node);
-    if(balance > 1 && compareUsername(user, node->left->user) > 0)
+    }
+
+    if (balance > 1 && compareUsername(user, node->left->user) > 0)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
-    if(balance < -1 && compareUsername(user, node->right->user) < 0)
+
+    if (balance < -1 && compareUsername(user, node->right->user) < 0)
     {
-        node->right = rightRotate(node);
+        node->right = rightRotate(node->right);
         return leftRotate(node);
     }
 
+    std::cout << "Inserted user: " << user->getUsername() << std::endl;
     return node;
 }
+
+void AVLTree::insert(User *user)
+{
+    if (user == nullptr) {
+        std::cerr << "Error: Attempting to insert a nullptr into AVLTree" << std::endl;
+        return;
+    }
+
+    std::cout << "Inserting user: " << user->getUsername() << std::endl;
+    root = insert(root, user);
+}
+
 
 Node *AVLTree::search(Node *node, const String &username)
 {
@@ -99,11 +131,6 @@ Node *AVLTree::search(Node *node, const String &username)
         return search(node->left, username);
 
     return search(node->right, username);
-}
-
-void AVLTree::insert(User *user)
-{
-    root = insert(root, user);
 }
 
 bool AVLTree::searchUser(const String &username)

@@ -96,11 +96,31 @@ User* loadFromFile(const String& filename)
 Node *parseUserFiles(const String &path)
 {
     AVLTree root;
+    if (fs::exists(path) == false) 
+    {
+        std::cerr << "Error: Path does not exist: " << path << std::endl;
+        return nullptr;
+    }
+    if (fs::is_directory(path) == false) 
+    {
+        std::cerr << "Error: Path is not a directory: " << path << std::endl;
+        return nullptr;
+    }
     for (const auto& entry : fs::directory_iterator(path))
     {
             String filepath = entry.path().string();
+            if(filepath.find(".txt") == String::npos)
+            {
+                std::cout << "Parsing complete" << std::endl;
+                break;
+            }
             User* user = loadFromFile(filepath);
-            if (user != nullptr)
+            if(user == nullptr)
+            {
+                std::cerr << "Error loading user from file: " << filepath << std::endl;
+                continue;
+            }
+            else
             {
                 root.insert(user);
             }
