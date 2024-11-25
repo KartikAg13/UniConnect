@@ -14,8 +14,9 @@ using String = std::string;
 class Node;
 class User;
 
-class AVLTree {
-    private:
+class AVLTree 
+{
+private:
     Node* root;
 
     int height(Node *);
@@ -30,7 +31,7 @@ class AVLTree {
 
     Node* insert(Node *, User *);
 
-    public:
+public:
     AVLTree();
 
     AVLTree(Node *);

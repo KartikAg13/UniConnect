@@ -209,3 +209,8 @@ String User::getGenderAsString() const
 {
     return gender == false ? "Male" : "Female";
 }
+
+inline bool operator==(const User& u1, const User& u2) 
+{
+        return u1.getUsername() == u2.getUsername();
+}

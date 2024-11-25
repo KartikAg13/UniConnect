@@ -1,33 +1,28 @@
 #include "User.h"
 #include "File.h"
 #include "AVLTree.h"
-#include "suggestion_model.h"
+#include "Graph.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
 
 using namespace std;
 
-// Function to collect all users from the AVLTree
-void collectUsers(Node* node, vector<User>& users) {
-    if (node == nullptr) return;
-    collectUsers(node->left, users);
-    users.push_back(*(node->user));
-    collectUsers(node->right, users);
-}
-
 int main()
 {
     String path = "userData/";
     Node *root = FILE_H::parseUserFiles(path);
     AVLTree *tree = new AVLTree(root);
-    if (root == nullptr)
+    if (tree == nullptr)
     {
         cerr << "Error: Could not parse user files" << endl;
         delete tree;
         return 1;
     }
     cout << "Successfully parsed user files" << endl;
+
+    Graph graph;
+    graph.buildGraphFromAVL(tree);
 
     int choice = -1;
     do 
@@ -61,12 +56,12 @@ int main()
             if (loggedInUser) {
                 vector<User> allUsers;
                 // Collect all users from the AVLTree
-                collectUsers(tree->getRoot(), allUsers);
+                graph.collectUsersFromAVL(tree->getRoot(), allUsers);
 
                 User targetUser = *loggedInUser; // Copy the logged-in user for suggestions
 
                 // Get suggestions
-                vector<User> suggestions = suggestUsers(targetUser, allUsers);
+                vector<User> suggestions = graph.suggestUsers(targetUser);
 
                 cout << "Suggested users for " << targetUser.getUsername() << ":\n";
                 for (const auto& user : suggestions) {

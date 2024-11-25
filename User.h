@@ -12,7 +12,8 @@ using String = std::string;
 
 class AVLTree;
 
-class User {
+class User 
+{
 private:
     String name;
     String username;
@@ -59,6 +60,8 @@ public:
     std::vector<String> getFollowers() const;
 
     String getGenderAsString() const;
+
+    friend inline bool operator==(const User& u1, const User& u2);
 };
 
 #endif
