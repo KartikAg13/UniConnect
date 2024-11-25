@@ -30,8 +30,6 @@ class AVLTree {
 
     Node* insert(Node *, User *);
 
-    Node* search(Node *, const String &);
-
     public:
     AVLTree();
 
@@ -48,6 +46,8 @@ class AVLTree {
     Node* getRoot();
 
     void inOrder(Node *);
+
+    Node* search(Node *, const String &);
 };
 
 #endif

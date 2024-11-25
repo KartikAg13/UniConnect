@@ -1,32 +1,39 @@
 #include "User.h"
 #include "File.h"
 #include "AVLTree.h"
+#include "suggestion_model.h"
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
-using String = std::string;
+using namespace std;
 
-class User;
-class AVLTree;
-class Node;
+// Function to collect all users from the AVLTree
+void collectUsers(Node* node, vector<User>& users) {
+    if (node == nullptr) return;
+    collectUsers(node->left, users);
+    users.push_back(*(node->user));
+    collectUsers(node->right, users);
+}
 
 int main()
 {
-    
     String path = "userData/";
     Node *root = FILE_H::parseUserFiles(path);
     AVLTree *tree = new AVLTree(root);
     if (root == nullptr)
     {
-        std::cerr << "Error: Could not parse user files" << std::endl;
+        cerr << "Error: Could not parse user files" << endl;
         delete tree;
         return 1;
     }
-    std::cout << "Successfully parsed user files" << std::endl;
+    cout << "Successfully parsed user files" << endl;
 
     int choice = -1;
     do 
     {
-        std::cout << "1. Register\n2. Login\n3. Exit" << std::endl;
-        std::cin >> choice;
+        cout << "1. Register\n2. Login\n3. Exit" << endl;
+        cin >> choice;
     } while(choice > 3 || choice < 1);
     if(choice == 1)
     {
@@ -36,22 +43,47 @@ int main()
     else if(choice == 2)
     {
         String username, password;
-        std::cout << "Please enter your username: ";
-        std::cin >> username;
-        std::cout << "Please enter your password: ";
-        std::cin >> password;
+        cout << "Please enter your username: ";
+        cin >> username;
+        cout << "Please enter your password: ";
+        cin >> password;
         if(tree->userLogin(username, password))
         {
-            std::cout << "User found" << std::endl;
+            cout << "User found" << endl;
+            User *loggedInUser = nullptr;
+
+            // Find the logged-in user in the tree
+            Node *node = tree->search(tree->getRoot(), username);
+            if (node != nullptr) {
+                loggedInUser = node->user;
+            }
+
+            if (loggedInUser) {
+                vector<User> allUsers;
+                // Collect all users from the AVLTree
+                collectUsers(tree->getRoot(), allUsers);
+
+                User targetUser = *loggedInUser; // Copy the logged-in user for suggestions
+
+                // Get suggestions
+                vector<User> suggestions = suggestUsers(targetUser, allUsers);
+
+                cout << "Suggested users for " << targetUser.getUsername() << ":\n";
+                for (const auto& user : suggestions) {
+                    cout << user.getUsername() << "\n";
+                }
+            } else {
+                cout << "User not found in tree." << endl;
+            }
         }
         else
         {
-            std::cout << "User not found" << std::endl;
+            cout << "User not found" << endl;
         }
     }
     else
     {
-        std::cout << "Exiting..." << std::endl;
+        cout << "Exiting..." << endl;
     }
     delete tree;
     return 0;
