@@ -4,8 +4,8 @@ LDFLAGS = -lstdc++fs
 
 all: uniconnect
 
-uniconnect: main.o User.o Node.o AVLTree.o File.o Graph.o
-	$(CXX) $(CXXFLAGS) -o uniconnect main.o User.o Node.o AVLTree.o File.o Graph.o $(LDFLAGS)
+uniconnect: main.o User.o Node.o AVLTree.o File.o Graph.o Chat.o
+	$(CXX) $(CXXFLAGS) -o uniconnect main.o User.o Node.o AVLTree.o File.o Graph.o Chat.o $(LDFLAGS)
 
 main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c main.cpp
@@ -24,6 +24,9 @@ File.o: File.cpp File.h
 
 Graph.o: Graph.cpp Graph.h
 	$(CXX) $(CXXFLAGS) -c Graph.cpp -o Graph.o
+
+Chat.o: Chat.cpp Chat.h
+	$(CXX) $(CXXFLAGS) -c Chat.cpp
 
 clean:
 	rm -f *.o uniconnect
