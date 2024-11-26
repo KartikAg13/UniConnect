@@ -4,25 +4,37 @@ Graph::Graph() {}
 
 void Graph::addEdge(const User& u, const User& v, int weight) 
 {
-    adjacencyList[u].push_back({v, weight});
-    adjacencyList[v].push_back({u, weight});
+    auto& neighbors = adjacencyList[u];
+
+    auto it = std::find_if(neighbors.begin(), neighbors.end(), [&](const std::pair<User, int>& p) {
+        return p.first.getUsername() == v.getUsername();
+    });
+
+    if (it == neighbors.end()) 
+    {
+        neighbors.emplace_back(v, weight);
+        adjacencyList[v].emplace_back(u, weight);
+    }
 }
+
 
 int Graph::calculateSimilarity(const User& u1, const User& u2) const 
 {
     int similarity = 0;
-    for (const auto& quality1 : u1.getQualities()) 
+
+    const auto& qualities1 = u1.getQualities();
+    const auto& qualities2 = u2.getQualities();
+
+    for (const auto& quality1 : qualities1) 
     {
-        for (const auto& quality2 : u2.getQualities()) 
+        if (std::find(qualities2.begin(), qualities2.end(), quality1) != qualities2.end())
         {
-            if (quality1 == quality2) 
-            {
-                similarity++;
-            }
+            similarity++;
         }
     }
     return similarity;
 }
+
 
 void Graph::print() const 
 {
@@ -80,8 +92,27 @@ void Graph::buildGraphFromAVL(AVLTree* tree)
 {
     std::vector<User> users;
     collectUsersFromAVL(tree->getRoot(), users);
-    buildGraph(users);
+
+    for (const auto& user : users) 
+    {
+        for (const auto& followerUsername : user.getFollowers()) 
+        {
+            auto it = std::find_if(users.begin(), users.end(), [&](const User& u) {
+                return u.getUsername() == followerUsername;
+            });
+
+            if (it != users.end()) 
+            {
+                int similarity = calculateSimilarity(user, *it);
+                if (similarity > 0) 
+                {
+                    addEdge(user, *it, similarity);
+                }
+            }
+        }
+    }
 }
+
 
 void Graph::collectUsersFromAVL(Node* node, std::vector<User>& users) 
 {
@@ -89,6 +120,7 @@ void Graph::collectUsersFromAVL(Node* node, std::vector<User>& users)
     {
         return;
     }
+
     collectUsersFromAVL(node->left, users);
     users.push_back(*node->user);
     collectUsersFromAVL(node->right, users);

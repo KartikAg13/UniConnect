@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -19,7 +20,11 @@ int main()
         delete tree;
         return 1;
     }
-    cout << "Successfully parsed user files" << endl;
+    else
+    {
+        cout << "Successfully parsed user files" << endl;
+        system("clear");
+    }
 
     Graph graph;
     graph.buildGraphFromAVL(tree);
