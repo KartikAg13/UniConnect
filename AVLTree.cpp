@@ -82,7 +82,6 @@ Node *AVLTree::insert(Node *node, User *user)
     node->height = 1 + std::max(height(node->left), height(node->right));
 
     int balance = getBalance(node);
-    std::cout << "Balance for " << user->getUsername() << ": " << balance << std::endl;
 
     if (balance > 1 && compareUsername(user, node->left->user) < 0)
     {
@@ -106,7 +105,6 @@ Node *AVLTree::insert(Node *node, User *user)
         return leftRotate(node);
     }
 
-    std::cout << "Inserted user: " << user->getUsername() << std::endl;
     return node;
 }
 
@@ -117,7 +115,6 @@ void AVLTree::insert(User *user)
         return;
     }
 
-    std::cout << "Inserting user: " << user->getUsername() << std::endl;
     root = insert(root, user);
 }
 

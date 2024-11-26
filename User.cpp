@@ -118,7 +118,7 @@ void User::inputUserDetails(AVLTree *root)
     String quality;
     int max_qualities = 5;
     std::cout << "Please enter " << max_qualities << " qualities: " << std::endl;
-    while(qualities.size() < max_qualities)
+    while(static_cast<int>(qualities.size()) < max_qualities)
     {
         std::cout << "Quality: ";
         std::cin >> quality;
@@ -159,7 +159,7 @@ void User::printUserDetails() const
 
     std::cout << "Number of Followers: " << followers.size() << std::endl;
     std::cout << "List of Followers: " << std::endl;
-    for (const String follower : followers) 
+    for (const String &follower : followers) 
     {
         std::cout << follower << std::endl;
     }
@@ -208,9 +208,4 @@ std::vector<String> User::getFollowers() const
 String User::getGenderAsString() const
 {
     return gender == false ? "Male" : "Female";
-}
-
-inline bool operator==(const User& u1, const User& u2) 
-{
-        return u1.getUsername() == u2.getUsername();
 }

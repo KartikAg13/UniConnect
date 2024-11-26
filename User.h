@@ -61,7 +61,10 @@ public:
 
     String getGenderAsString() const;
 
-    friend inline bool operator==(const User& u1, const User& u2);
+    friend inline bool operator==(const User& u1, const User& u2) 
+    {
+        return u1.username == u2.username;
+    }
 };
 
 #endif
