@@ -2,12 +2,15 @@
 #include "File.h"
 #include "AVLTree.h"
 #include "Graph.h"
+#include "Chat.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
 #include <cstdlib>
 
 using namespace std;
+
+void move(User, AVLTree *);
 
 int main()
 {
@@ -35,11 +38,14 @@ int main()
         cout << "1. Register\n2. Login\n3. Exit" << endl;
         cin >> choice;
     } while(choice > 3 || choice < 1);
+    system("clear");
     if(choice == 1)
     {
         User user;
         user.inputUserDetails(tree);
-    } 
+        system("clear");
+        move(user, tree);
+    }
     else if(choice == 2)
     {
         String username, password;
@@ -87,4 +93,42 @@ int main()
     }
     delete tree;
     return 0;
+}
+
+void move(User user, AVLTree *tree)
+{
+    int choice = -1;
+    do
+    {
+        cout << "1. Chat\n2.Add Follower\n3.Profile" << endl;
+        cin >> choice;
+    } while(choice > 3 || choice < 1);
+    system("clear");
+    if(choice == 1)
+    {
+        PostManager post;
+        string message;
+        cout << "Please enter the message: ";
+        cin >> message;
+        post.addPost(user, message);
+    }
+    else if(choice == 2)
+    {
+        string search;
+        cout << "Please enter the username you want to search: ";
+        cin >> search;
+        User *foundUser = tree->search(tree->getRoot(), search)->user;
+        if(foundUser)
+        {
+            user.addFollower(foundUser);
+        }
+        else
+        {
+            cout << "User not found" << endl;
+        }
+    }
+    else
+    {
+        user.printUserDetails();
+    }
 }

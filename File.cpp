@@ -7,7 +7,7 @@ bool saveUserToFile(User *user)
 {
     try
     {
-        const String filePath = user->getUsername() + ".txt";
+        const String filePath = "userData/" + user->getUsername() + ".txt";
         std::ofstream file(filePath, std::ios::app);
         if (file.is_open() == false)
         {

@@ -125,6 +125,7 @@ void User::inputUserDetails(AVLTree *root)
         qualities.push_back(quality);
     }
 
+    root->insert(this);
     if(FILE_H::saveUserToFile(this))
         std::cout << "User successfully registered" << std::endl;
     else
