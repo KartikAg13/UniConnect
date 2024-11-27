@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void move(User, AVLTree *);
+void moving(User, AVLTree *, Graph);
 
 int main()
 {
@@ -44,7 +44,7 @@ int main()
         User user;
         user.inputUserDetails(tree);
         system("clear");
-        move(user, tree);
+        moving(user, tree, graph);
     }
     else if(choice == 2)
     {
@@ -57,29 +57,12 @@ int main()
         {
             cout << "User found" << endl;
             User *loggedInUser = nullptr;
-
-            // Find the logged-in user in the tree
             Node *node = tree->search(tree->getRoot(), username);
-            if (node != nullptr) {
+            if(node != nullptr)
+            {
                 loggedInUser = node->user;
-            }
-
-            if (loggedInUser) {
-                vector<User> allUsers;
-                // Collect all users from the AVLTree
-                graph.collectUsersFromAVL(tree->getRoot(), allUsers);
-
-                User targetUser = *loggedInUser; // Copy the logged-in user for suggestions
-
-                // Get suggestions
-                vector<User> suggestions = graph.suggestUsers(targetUser);
-
-                cout << "Suggested users for " << targetUser.getUsername() << ":\n";
-                for (const auto& user : suggestions) {
-                    cout << user.getUsername() << "\n";
-                }
-            } else {
-                cout << "User not found in tree." << endl;
+                User target = *loggedInUser;
+                moving(target, tree, graph);
             }
         }
         else
@@ -91,26 +74,31 @@ int main()
     {
         cout << "Exiting..." << endl;
     }
+    system("clear");
     delete tree;
     return 0;
 }
 
-void move(User user, AVLTree *tree)
+void moving(User user, AVLTree *tree, Graph graph)
 {
+    system("clear");
     int choice = -1;
     do
     {
-        cout << "1. Chat\n2.Add Follower\n3.Profile" << endl;
+        cout << "1. Chat\n2. Add Follower\n3. Profile\n4. Suggest followers" << endl;
         cin >> choice;
-    } while(choice > 3 || choice < 1);
+    } while(choice > 4 || choice < 1);
     system("clear");
     if(choice == 1)
     {
         PostManager post;
         string message;
+        post.loadPostsFromFile("post.txt");
+        post.displayPosts();
         cout << "Please enter the message: ";
         cin >> message;
         post.addPost(user, message);
+        post.savePostsToFile("post.txt");
     }
     else if(choice == 2)
     {
@@ -121,14 +109,24 @@ void move(User user, AVLTree *tree)
         if(foundUser)
         {
             user.addFollower(foundUser);
+            cout << foundUser->getUsername() << "has been added to followers" << endl;
         }
         else
         {
             cout << "User not found" << endl;
         }
     }
-    else
+    else if(choice == 3)
     {
         user.printUserDetails();
+    }
+    else
+    {
+        vector<User> suggestions = graph.suggestUsers(user);
+        cout << "Suggested users for " << user.getUsername() << ":\n";
+        for (const auto& some : suggestions) 
+        {
+            cout << some.getUsername() << endl;
+        }
     }
 }

@@ -66,7 +66,17 @@ User* loadFromFile(const String& filename)
     getline(file, password);
     getline(file, email);
     getline(file, line);
-    age = stoi(line);
+    
+    try
+    {
+        age = std::stoi(line);
+    }
+    catch (const std::invalid_argument& e)
+    {
+        std::cerr << "Invalid age value in file " << filename << ": " << line << std::endl;
+        return nullptr;
+    }
+
     getline(file, line);
     gender = (line == "Male") ? false : true;
 

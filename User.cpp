@@ -96,7 +96,7 @@ void User::inputUserDetails(AVLTree *root)
     {
         std::cout << "Please enter the username: ";
         std::cin >> username;
-        if(root->searchUser(username) == false)
+        if(root->searchUser(username) == true)
         {
             std::cout << "Username already exists. Please try again." << std::endl;
             continue;
