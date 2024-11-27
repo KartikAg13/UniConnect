@@ -14,6 +14,7 @@ bool saveUserToFile(User *user)
             std::cout << "Error: Could not open file " << filePath << " for writing" << std::endl;
             return false;
         }
+        file << user->getUsername() << std::endl;
         file << user->getName() << std::endl;
         file << user->getPassword() << std::endl;
         file << user->getEmail() << std::endl;

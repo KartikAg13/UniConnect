@@ -74,7 +74,6 @@ int main()
     {
         cout << "Exiting..." << endl;
     }
-    system("clear");
     delete tree;
     return 0;
 }
@@ -109,7 +108,7 @@ void moving(User user, AVLTree *tree, Graph graph)
         if(foundUser)
         {
             user.addFollower(foundUser);
-            cout << foundUser->getUsername() << "has been added to followers" << endl;
+            cout << foundUser->getUsername() << " has been added to followers" << endl;
         }
         else
         {
